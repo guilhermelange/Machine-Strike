@@ -23,6 +23,7 @@ class DirectorMachine {
             this._builder.setAttributes(attributes);
             this._builder.setSides(sides);
             this._builder.setSkills();
+            this._builder.setImage();
         }
     }
 

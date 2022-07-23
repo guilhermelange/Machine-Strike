@@ -9,7 +9,6 @@ import MachineBuilderPull from "./MachineBuilderPull";
 import MachineBuilderRam from "./MachineBuilderRam";
 import MachineBuilderSwoop from "./MachineBuilderSwoop";
 
-
 export function getBuilders(): Map<string, MachineBuilder> {
     const machineBuilders = new Map<string, MachineBuilder>();
     machineBuilders.set("MELEE", new MachineBuilderMelee())

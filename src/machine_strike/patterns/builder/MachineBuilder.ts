@@ -1,11 +1,5 @@
 import Direction from "../../model/Direction";
 import Machine, { Side } from "../../model/Machine";
-import MachineBuilderDash from "./MachineBuilderDash";
-import MachineBuilderGunner from "./MachineBuilderGunner";
-import MachineBuilderMelee from "./MachineBuilderMelee";
-import MachineBuilderPull from "./MachineBuilderPull";
-import MachineBuilderRam from "./MachineBuilderRam";
-import MachineBuilderSwoop from "./MachineBuilderSwoop";
 
 export interface IAttributes {
     name: string;
@@ -42,6 +36,8 @@ abstract class MachineBuilder {
     }
 
     public abstract setSkills(): void;
+
+    public abstract setImage(): void;
 
     public getResult(): Machine | undefined {
         return this.machine;

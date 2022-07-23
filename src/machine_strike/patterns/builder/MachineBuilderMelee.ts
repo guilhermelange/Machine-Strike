@@ -8,6 +8,12 @@ class MachineBuilderMelee extends MachineBuilder {
 
     public setSkills(): void {
     }
+
+    public setImage(): void {
+        if (this.machine) {
+            this.machine.image = "machine_melee.png";
+        }
+    }
 }
 
 export default MachineBuilderMelee;

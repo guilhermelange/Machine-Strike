@@ -18,7 +18,6 @@ class Settings {
     private _boardFile: string;
 
     public static getInstance(): Settings {
-        console.log(this._instance)
         if (this._instance == undefined) {
             this._instance = new Settings();
         }

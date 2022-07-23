@@ -1,6 +1,7 @@
 import Settings from "../../global/Settings";
 import DataFactoryJson from "../abstract_factory/dao.json/DataFactoryJson";
 import DataFactoryXml from "../abstract_factory/dao.xml/DataFactoryXml";
+import DataReaderBoard from "../abstract_factory/dao/DataReaderBoard";
 import DataReaderMachine from "../abstract_factory/dao/DataReaderMachine";
 import IndexViewObserver from "./IndexViewObserver";
 import IndexViewUC from "./IndexViewUC";
@@ -45,6 +46,17 @@ class IndexViewUCImpl implements IndexViewUC {
     }
 
     private async readBoardFile(file: File) {
+        const fileType = file.type
+
+        let BoardReader = null
+        if (fileType.includes('xml')) {
+            const factory = new DataFactoryXml();
+            BoardReader = factory.readerBoard() as DataReaderBoard
+        } else {
+            const factory = new DataFactoryJson();
+            BoardReader = factory.readerBoard() as DataReaderBoard
+        }
+        await BoardReader.read(file)
     }
 
     addObserver(observer: IndexViewObserver): void {

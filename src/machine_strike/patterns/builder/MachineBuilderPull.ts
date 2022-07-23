@@ -8,6 +8,12 @@ class MachineBuilderPull extends MachineBuilder {
 
     public setSkills(): void {
     }
+
+    public setImage(): void {
+        if (this.machine) {
+            this.machine.image = "machine_pull.png";
+        }
+    }
 }
 
 export default MachineBuilderPull;

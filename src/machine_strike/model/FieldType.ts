@@ -18,4 +18,15 @@ export function getColor(type: FieldType): string {
     return map.get(type)
 }
 
+export function getFieldType(type: string): FieldType {
+    var map = new Map()
+    map.set("CHASM", FieldType.CHASM)
+    map.set("MARSH", FieldType.MARSH)
+    map.set("GRASSLAND", FieldType.GRASSLAND)
+    map.set("FOREST", FieldType.FOREST)
+    map.set("HILL", FieldType.HILL)
+    map.set("MOUNTAIN", FieldType.MOUNTAIN)
+    return map.get(type)
+}
+
 export default FieldType

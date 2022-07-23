@@ -8,6 +8,12 @@ class MachineBuilderDash extends MachineBuilder {
 
     public setSkills(): void {
     }
+
+    public setImage(): void {
+        if (this.machine) {
+            this.machine.image = "machine_dash.png";
+        }
+    }
 }
 
 export default MachineBuilderDash;

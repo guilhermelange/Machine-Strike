@@ -72,6 +72,7 @@ export default function Index() {
                 <FormLabel htmlFor='machines'>Máquinas</FormLabel>
                 <Input
                   type={'file'}
+                  accept={'.json,.xml'}
                   id='machines'
                   p={1}
                   placeholder='Selecione o arquivo de máquinas'
@@ -90,6 +91,7 @@ export default function Index() {
                 <FormLabel htmlFor='board'>Tabuleiro</FormLabel>
                 <Input
                   type={'file'}
+                  accept={'.json,.xml'}
                   id='board'
                   p={1}
                   placeholder='Selecione o arquivo do Tabuleiro'

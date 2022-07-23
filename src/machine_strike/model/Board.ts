@@ -10,11 +10,18 @@ class Board {
 
         switch (args.length) {
             case 1:
+                this._tiles = args[0] as Tile[][]
+                break;
+            case 2:
+                this._tiles = args[0] as Tile[][]
                 this._file = args[0] as string
                 break;
         }
     }
 
+    get tiles(): Tile[][] {
+        return this._tiles;
+    }
 
     public toString = () : string => {
         let texto: string = "";

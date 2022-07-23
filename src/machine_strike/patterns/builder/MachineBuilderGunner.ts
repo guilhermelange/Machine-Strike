@@ -8,6 +8,12 @@ class MachineBuilderGunner extends MachineBuilder {
 
     public setSkills(): void {
     }
+
+    public setImage(): void {
+        if (this.machine) {
+            this.machine.image = "machine_gunner.png";
+        }
+    }
 }
 
 export default MachineBuilderGunner;

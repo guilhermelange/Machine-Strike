@@ -8,6 +8,12 @@ class MachineBuilderSwoop extends MachineBuilder {
 
     public setSkills(): void {
     }
+
+    public setImage(): void {
+        if (this.machine) {
+            this.machine.image = "machine_swoop.png";
+        }
+    }
 }
 
 export default MachineBuilderSwoop;

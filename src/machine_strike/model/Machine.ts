@@ -1,3 +1,4 @@
+import { timeStamp } from "console";
 import Direction from "./Direction";
 
 class Machine {
@@ -9,6 +10,7 @@ class Machine {
     private _victoryPoints: number;
     private _sides: Map<Direction, Side>;
     private _image: string;
+    private _direction: Direction;
 
     constructor(...args: any[]) {
         this._name = '';
@@ -19,6 +21,7 @@ class Machine {
         this._victoryPoints = 0;
         this._sides = new Map<Direction, Side>();
         this._image = "";
+        this._direction = Direction.NORTH;
     }
 
     get name(): string {
@@ -96,13 +99,10 @@ export function getSideEnum(enumName: string): Side {
     switch (enumName) {
         case "ARMORED":
             return Side.ARMORED;
-            break;
         case "WEAK":
             return Side.WEAK;
-            break;
         default:
             return Side.DEFAULT;
-            break;
     }
 }
 

@@ -1,7 +1,12 @@
 import { Box, Container, Flex, Grid, GridItem, useColorModeValue } from "@chakra-ui/react";
 import Router from "next/router";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ReactElement, ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { findDOMNode } from "react-dom";
 import { IoMdArrowRoundBack } from 'react-icons/io'
+import Settings from "../machine_strike/global/Settings";
+import Tile from "../machine_strike/model/Tile";
+import TileCursor from "../machine_strike/patterns/decorator/TileCursor";
+import TileRendered from "../machine_strike/patterns/decorator/TileRendered";
 
 export default function Game() {
     const formBackground = useColorModeValue('gray.100', 'gray.700')
@@ -9,6 +14,9 @@ export default function Game() {
     const [height, setHeight] = useState(0);
     const cursor = useRef([7,4])
     const [cursorState, setCursorState] = useState([7,4])
+    const settings = Settings.getInstance();
+    const board = settings.board
+    const tiles = board.tiles;
 
 
     useLayoutEffect(() => {
@@ -42,17 +50,11 @@ export default function Game() {
         }
     }
 
-    const tiles: string[][] = []
-    for (let i = 0; i < 8; i++) {
-        let line = []
-        for (let j = 0; j < 8; j++) {
-            line.push(i + "" + j)
+    const applyDecorator = (tile: TileRendered, i: number, j: number): ReactNode => {
+        if (cursorState[0] == i && cursorState[1] == j) {
+            tile = new TileCursor(tile);
         }
-        tiles.push(line)
-    }
-
-    const handleRedirectStart = async () => {
-        Router.push('/')
+        return tile.draw(height, <></>);
     }
 
     return (
@@ -77,24 +79,7 @@ export default function Game() {
                         gap={0.5}
                         >
                         {tiles && tiles.map((tile, i) => tile.map((field, j) => (
-                            <Box key={field}
-                                position={'relative'}
-                                bg={'whiteAlpha.200'}
-                                h={height / 8 - (0.5  * 7)}
-                                w={height / 8 - (0.5  * 7)}
-                            >{field}
-                            {cursorState && cursorState[0] == i && cursorState[1] == j && (
-                                <Box position={'absolute'} 
-                                     w={'100%'} 
-                                     h={'100%'} 
-                                     top={0}
-                                     border={'2px solid blue'}
-                                     rounded={4}
-                                     borderColor={"teal.100"}
-                                     >
-                                </Box>
-                            )}
-                            </Box>
+                            applyDecorator(field, i, j)
                         )))}
                     </Grid>
                 </GridItem>
@@ -104,7 +89,7 @@ export default function Game() {
                 <GridItem area={'command'} bg={formBackground} rounded={6} p={3}>
                     Comandos
                 </GridItem>
-                <Flex position={'absolute'} top={3} left={3} w={''} alignItems={'flex-end'} cursor={'pointer'} onClick={handleRedirectStart}>
+                <Flex position={'absolute'} top={3} left={3} w={''} alignItems={'flex-end'} cursor={'pointer'} onClick={() => {Router.push('/')}}>
                     <IoMdArrowRoundBack></IoMdArrowRoundBack>
                 </Flex>
             </Grid>

@@ -1,6 +1,8 @@
-
+import { Box } from "@chakra-ui/react";
+import React, { ReactElement, ReactNode } from "react";
+import TileComponent from "../../components/TileComponent";
 import TileRendered from "../patterns/decorator/TileRendered";
-import FieldType from "./FieldType";
+import FieldType, { getColor } from "./FieldType";
 import Machine from "./Machine";
 
 class Tile implements TileRendered {
@@ -12,8 +14,11 @@ class Tile implements TileRendered {
         this._type = type;
     }
 
-    draw(height: number): void {
-        
+    draw(height: number, children: ReactNode): ReactElement {
+        console.log('tile origem: ', children)
+        return (
+            <TileComponent height={height}>{children}</TileComponent>
+        )
     }
 
     get machine(): Machine | any {

@@ -106,6 +106,25 @@ export default function Index() {
                   {errors.board && String(errors.board.message)}
                 </FormErrorMessage>
               </FormControl>
+              <FormControl isInvalid={!!errors.inventory}>
+                <FormLabel htmlFor='inventory'>Inventários</FormLabel>
+                <Input
+                  type={'file'}
+                  accept={'.json'}
+                  id='inventory'
+                  p={1}
+                  placeholder='Selecione o arquivo de Inventário'
+                  {...register('inventory', {
+                    required: 'Obrigatório informar um arquivo de Inventário',
+                  })}
+                />
+                {settings?.inventory_file && (
+                  <Text pt={0.5} fontSize={'sm'} color={'whiteAlpha.500'}>Selecionado anteriormente: {settings?.inventory_file}</Text>
+                )}
+                <FormErrorMessage>
+                  {errors.inventory && String(errors.inventory.message)}
+                </FormErrorMessage>
+              </FormControl>
               <Button colorScheme={'teal'} isLoading={isSubmitting} type='submit'>
                 Jogar
               </Button>
@@ -124,14 +143,16 @@ export default function Index() {
           <ModalBody>
             <Flex direction={'column'} gap={4}>
               <Text>
-                <Text display={'inline'} color={'teal.100'}>1. </Text>
-                Deve ser selecionado um arquivo válido de máquinas disponíveis no Game.
+                <Text display={'inline'} color={'teal.100'}>1. </Text>Deve ser selecionado um arquivo válido de máquinas do Game. Aqui serão definidas as máquinas que serão consideradas em um inventário e suas características.
               </Text>
               <Text>
-                <Text display={'inline'} color={'teal.100'}>2. </Text>Deve ser selecionado um arquivo válido de tabuleiro do Game.
+                <Text display={'inline'} color={'teal.100'}>2. </Text>Deve ser selecionado um arquivo válido de tabuleiro do Game. O tabuleiro representa os terrenos em cada posição.
               </Text>
               <Text>
-                <Text display={'inline'} color={'teal.100'}>3. </Text>Iniciar a partida com base nas configurações selecionada.
+                <Text display={'inline'} color={'teal.100'}>3. </Text>Deve ser selecionado um arquivo válido de inventário para os jogadores. O inventário define as máquinas em campo de cada jogador assim como sua possição inicial.
+              </Text>
+              <Text>
+                <Text display={'inline'} color={'teal.100'}>4. </Text>Iniciar a partida com base nas configurações selecionada.
               </Text>
             </Flex>
           </ModalBody>

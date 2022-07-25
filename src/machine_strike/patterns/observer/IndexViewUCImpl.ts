@@ -2,6 +2,7 @@ import Settings from "../../global/Settings";
 import DataFactoryJson from "../abstract_factory/dao.json/DataFactoryJson";
 import DataFactoryXml from "../abstract_factory/dao.xml/DataFactoryXml";
 import DataReaderBoard from "../abstract_factory/dao/DataReaderBoard";
+import DataReaderInventory from "../abstract_factory/dao/DataReaderInventory";
 import DataReaderMachine from "../abstract_factory/dao/DataReaderMachine";
 import IndexViewObserver from "./IndexViewObserver";
 import IndexViewUC from "./IndexViewUC";
@@ -14,16 +15,19 @@ class IndexViewUCImpl implements IndexViewUC {
 
     async startGame(data: any): Promise<void> {
         const settings = Settings.getInstance()
-        const { machines, board } = data;
+        const { machines, board, inventory } = data;
 
         const machinesFile: File = machines[0];
         const boardFile: File = board[0];
+        const inventoryFile: File = inventory[0];
 
         settings.machines_file = machinesFile.name
         settings.board_file = boardFile.name
+        settings.inventory_file = inventoryFile.name
 
         await this.readMachineFile(machinesFile)
         await this.readBoardFile(boardFile)
+        await this.readInventoryFile(inventoryFile)
 
         for (let index = 0; index < this.obs.length; index++) {
             const item: IndexViewObserver = this.obs[index];
@@ -57,6 +61,12 @@ class IndexViewUCImpl implements IndexViewUC {
             BoardReader = factory.readerBoard() as DataReaderBoard
         }
         await BoardReader.read(file)
+    }
+
+    private async readInventoryFile(file: File) {
+        const factory = new DataFactoryJson();
+        const InventoryReader = factory.readerInventory() as DataReaderInventory
+        await InventoryReader.read(file)
     }
 
     addObserver(observer: IndexViewObserver): void {

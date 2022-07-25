@@ -1,6 +1,7 @@
 import Settings from "../../../global/Settings";
 import Board from "../../../model/Board";
 import FieldType, { getFieldType } from "../../../model/FieldType";
+import Point from "../../../model/Point";
 import Tile from "../../../model/Tile";
 import JsonToJs from "../../adapter/JsonToJs";
 import DataReaderBoard from "../dao/DataReaderBoard";
@@ -25,14 +26,13 @@ function loadBoardJs(fields: IBoardFieldType[]) {
         const tileLine = [] as Tile[]
         for (let j = 0; j < fields[i].length; j++) {
             const currentFieldType = getFieldType(fields[i][j])
-            const tile = new Tile(null, currentFieldType)
+            const tile = new Tile(null, currentFieldType, new Point(i, j))
             tileLine.push(tile)
         }
         tiles.push(tileLine)
     }
 
     const board = new Board(tiles);
-    console.log(board)
     return board
 }
 

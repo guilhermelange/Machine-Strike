@@ -1,23 +1,25 @@
-import { Box, Container, Flex, Grid, GridItem, useColorModeValue } from "@chakra-ui/react";
+import { Container, Flex, Grid, GridItem, Heading, Text, useColorModeValue, VStack } from "@chakra-ui/react";
 import Router from "next/router";
-import { ReactElement, ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { findDOMNode } from "react-dom";
+import { ReactNode, useLayoutEffect, useRef, useState } from "react";
 import { IoMdArrowRoundBack } from 'react-icons/io'
+import FieldTerrainInformation from "../components/FieldTerrainInformation";
+import MachineInformation from "../components/MachineInformation";
 import Settings from "../machine_strike/global/Settings";
+import Point from "../machine_strike/model/Point";
 import Tile from "../machine_strike/model/Tile";
 import TileCursor from "../machine_strike/patterns/decorator/TileCursor";
+import TileMachine from "../machine_strike/patterns/decorator/TileMachine";
 import TileRendered from "../machine_strike/patterns/decorator/TileRendered";
 
 export default function Game() {
     const formBackground = useColorModeValue('gray.100', 'gray.700')
     const ref = useRef<HTMLDivElement>(null);
     const [height, setHeight] = useState(0);
-    const cursor = useRef([7,4])
-    const [cursorState, setCursorState] = useState([7,4])
+    const cursor = useRef(new Point(7, 4))
+    const [cursorState, setCursorState] = useState(new Point(7, 4))
     const settings = Settings.getInstance();
-    const board = settings.board
-    const tiles = board.tiles;
-
+    const board = useRef(settings.board)
+    const tiles = useRef(board.current.tiles);
 
     useLayoutEffect(() => {
         if (ref.current) {
@@ -25,19 +27,19 @@ export default function Game() {
         }
 
         window.onkeyup = (event) => {
-            const [i,j] = cursor.current
+            const [i, j] = cursor.current.coor
             switch (event.key) {
                 case 'ArrowUp':
-                    moveCursor(i-1, j)
+                    moveCursor(i - 1, j)
                     break;
                 case 'ArrowRight':
-                    moveCursor(i, j+1)
+                    moveCursor(i, j + 1)
                     break;
                 case 'ArrowDown':
-                    moveCursor(i+1, j)
+                    moveCursor(i + 1, j)
                     break;
                 case 'ArrowLeft':
-                    moveCursor(i, j-1)
+                    moveCursor(i, j - 1)
                     break;
             }
         };
@@ -45,16 +47,22 @@ export default function Game() {
 
     const moveCursor = (i: number, j: number) => {
         if (i >= 0 && j >= 0 && i <= 7 && j <= 7) {
-            cursor.current = [i, j]
-            setCursorState([i, j])
+            cursor.current.x = i
+            cursor.current.y = j
+            setCursorState(new Point(i, j))
         }
     }
 
-    const applyDecorator = (tile: TileRendered, i: number, j: number): ReactNode => {
-        if (cursorState[0] == i && cursorState[1] == j) {
-            tile = new TileCursor(tile);
+    const applyDecorator = (tileRendered: TileRendered, tile: Tile): ReactNode => {
+        if (cursorState.equals(tile.point)) {
+            tileRendered = new TileCursor(tileRendered);
         }
-        return tile.draw(height, <></>);
+
+        if (tile.machine) {
+            tileRendered = new TileMachine(tileRendered, tile.machine)
+        }
+
+        return tileRendered.draw(height, <></>);
     }
 
     return (
@@ -70,26 +78,38 @@ export default function Game() {
                 position={'relative'}
             >
                 <GridItem area={'board'} bg={formBackground} rounded={6} p={3} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-                    <Grid 
+                    <Grid
                         h={'100%'}
                         w={(height)}
                         ref={ref}
                         templateRows='repeat(8, 1fr)'
                         templateColumns='repeat(8, 1fr)'
                         gap={0.5}
-                        >
-                        {tiles && tiles.map((tile, i) => tile.map((field, j) => (
-                            applyDecorator(field, i, j)
+                    >
+                        {tiles.current && tiles.current.map((tile, i) => tile.map((field, j) => (
+                            applyDecorator(field, field)
                         )))}
                     </Grid>
                 </GridItem>
                 <GridItem area={'machine'} bg={formBackground} rounded={6} p={3}>
-                    Máquina
+                    <VStack alignItems={'start'}>
+                        <Heading size={'md'}>Informações</Heading>
+                        <Text w={'100%'} mt={0}>
+                            {tiles && tiles.current[cursorState.x][cursorState.y] && (
+                                <FieldTerrainInformation tile={tiles.current[cursorState.x][cursorState.y]} />
+                            )}</Text>
+                        <Text w={'100%'} mt={0}>
+                            {tiles && tiles.current[cursorState.x][cursorState.y].machine && (
+                                <MachineInformation machine={tiles.current[cursorState.x][cursorState.y].machine} />
+                            )}</Text>
+                    </VStack>
                 </GridItem>
                 <GridItem area={'command'} bg={formBackground} rounded={6} p={3}>
-                    Comandos
+                    <VStack alignItems={'start'}>
+                        <Heading size={'md'}>Comandos</Heading>
+                    </VStack>
                 </GridItem>
-                <Flex position={'absolute'} top={3} left={3} w={''} alignItems={'flex-end'} cursor={'pointer'} onClick={() => {Router.push('/')}}>
+                <Flex position={'absolute'} top={3} left={3} w={''} alignItems={'flex-end'} cursor={'pointer'} onClick={() => { Router.push('/') }}>
                     <IoMdArrowRoundBack></IoMdArrowRoundBack>
                 </Flex>
             </Grid>

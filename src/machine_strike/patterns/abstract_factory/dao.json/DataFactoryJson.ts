@@ -3,8 +3,14 @@ import DataReaderMachine from "../dao/DataReaderMachine";
 import DataFactory from "../DataFactory";
 import MachineJson from "./MachineJson";
 import BoardJson from "./BoardJson";
+import InventoryJson from "./InventoryJson";
+import DataReaderInventory from "../dao/DataReaderInventory";
 
 class DataFactoryJson extends DataFactory {
+    public readerInventory(): DataReaderInventory {
+        return new InventoryJson();
+    }
+
     public readerBoard(): DataReaderBoard {
         return new BoardJson();
     }

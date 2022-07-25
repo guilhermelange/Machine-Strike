@@ -4,6 +4,7 @@ import DataReaderBoard from "../dao/DataReaderBoard";
 import Tile from "../../../model/Tile";
 import Board from "../../../model/Board";
 import { getFieldType } from "../../../model/FieldType";
+import Point from "../../../model/Point";
 
 interface IRoot {
     root: {
@@ -30,7 +31,7 @@ function loadBoardJs(fields: [{item: string[]}]) {
         const tileLine = [] as Tile[]
         for (let j = 0; j < fields[i].item.length; j++) {
             const currentFieldType = getFieldType(fields[i].item[j])
-            const tile = new Tile(null, currentFieldType)
+            const tile = new Tile(null, currentFieldType, new Point(i, j))
             tileLine.push(tile)
         }
         tiles.push(tileLine)

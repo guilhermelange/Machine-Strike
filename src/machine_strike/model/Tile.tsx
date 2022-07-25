@@ -2,22 +2,24 @@ import { Box } from "@chakra-ui/react";
 import React, { ReactElement, ReactNode } from "react";
 import TileComponent from "../../components/TileComponent";
 import TileRendered from "../patterns/decorator/TileRendered";
-import FieldType, { getColor } from "./FieldType";
+import FieldType, { getFieldTypeImage } from "./FieldType";
 import Machine from "./Machine";
+import Point from "./Point";
 
 class Tile implements TileRendered {
     private _machine: Machine | null;
     private _type: FieldType;
+    private _point: Point;
 
-    constructor(machine: Machine | null, type: FieldType) {
+    constructor(machine: Machine | null, type: FieldType, point: Point) {
         this._machine = machine;
         this._type = type;
+        this._point = point;
     }
 
     draw(height: number, children: ReactNode): ReactElement {
-        console.log('tile origem: ', children)
         return (
-            <TileComponent height={height}>{children}</TileComponent>
+            <TileComponent height={height} image={getFieldTypeImage(this._type)}>{children}</TileComponent>
         )
     }
 
@@ -27,6 +29,18 @@ class Tile implements TileRendered {
 
     set machine(machine: Machine) {
         this._machine = machine;
+    }
+
+    get point(): Point {
+        return this._point;
+    }
+
+    set point(point: Point) {
+        this._point = point;
+    }
+
+    get type(): FieldType {
+        return this._type;
     }
 }
 

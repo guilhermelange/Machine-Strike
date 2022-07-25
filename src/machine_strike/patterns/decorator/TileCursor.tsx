@@ -11,7 +11,7 @@ class TileCursor extends TileDecorator {
                     w={'100%'} 
                     h={'100%'} 
                     top={0}
-                    border={'2px solid blue'}
+                    border={'3px solid blue'}
                     rounded={4}
                     borderColor={"teal.100"}
                     >

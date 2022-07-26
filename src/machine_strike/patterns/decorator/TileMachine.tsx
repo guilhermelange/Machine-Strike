@@ -3,6 +3,7 @@ import { Box, Text } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import Direction, { getSidesFromDirection } from "../../model/Direction";
 import Machine, { Side } from "../../model/Machine";
+import Player from "../../model/Player";
 import TileDecorator from "./TileDecorator";
 
 class TileMachine extends TileDecorator {
@@ -27,7 +28,7 @@ class TileMachine extends TileDecorator {
                             justifyContent={'center'}
                             >
                         {/* <img src={`machine/${machine.image}`} alt="" /> */}
-                        <Text fontWeight={'bold'}>{machine.name}</Text>
+                        <Text fontWeight={'bold'} color={(machine.player == Player.Player1) ? 'white' : 'black'}>{machine.name}</Text>
                     </Box>
                     <Box position={'relative'} w={'100%'} h={'100%'} >
                         {north != Side.DEFAULT && (

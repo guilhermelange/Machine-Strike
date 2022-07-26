@@ -1,5 +1,6 @@
 import Direction from "../../model/Direction";
 import Machine, { Side } from "../../model/Machine";
+import MachineStartState from "../state/MachineStartState";
 
 export interface IAttributes {
     name: string;

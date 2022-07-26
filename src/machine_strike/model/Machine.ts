@@ -1,6 +1,7 @@
-import Direction from "./Direction";
+import MachineStartState from "../patterns/state/MachineStartState";
+import MachineState from "../patterns/state/MachineStats";
+import Direction, { nextDirection } from "./Direction";
 import Player from "./Player";
-import Point from "./Point";
 
 interface ConstructorOf<T> {
     new(): T;
@@ -16,6 +17,7 @@ class Machine {
     private _image: string;
     private _direction: Direction;
     private _player: Player;
+    private _state: MachineState;
 
     constructor(...args: any[]) {
         this._name = '';
@@ -28,6 +30,7 @@ class Machine {
         this._image = "";
         this._direction = Direction.NORTH;
         this._player = Player.Player1;
+        this._state = new MachineStartState(this);
     }
 
     get cls(): ConstructorOf<this> {
@@ -74,6 +77,10 @@ class Machine {
         return this._direction;
     }
 
+    get state(): MachineState {
+        return this._state;
+    }
+
     set name(name: string) {
         this._name = name;
     }
@@ -114,6 +121,14 @@ class Machine {
         this._player = player;
     }
 
+    set state(state: MachineState) {
+        this._state = state;
+    }
+
+    changeDirection() {
+        this._direction = nextDirection(this._direction)
+    }
+
     clone(): Machine {
         const cloneObject = new this.cls;
         for (const attribut in this) {
@@ -124,6 +139,7 @@ class Machine {
         cloneObject._sides = this._sides;
         cloneObject._direction = this._direction;
         cloneObject._player = this._player;
+        cloneObject._state = this._state;
 
         return cloneObject;
     }

@@ -3,6 +3,7 @@ import Direction from "../../../model/Direction";
 import Machine from "../../../model/Machine";
 import Player from "../../../model/Player";
 import JsonToJs from "../../adapter/JsonToJs";
+import MachineStartState from "../../state/MachineStartState";
 import DataReaderInventory from "../dao/DataReaderInventory";
 
 interface IRoot {
@@ -48,14 +49,13 @@ function loadInventoryJs(data: IInventaryJson[], defaultDirection: Direction, pl
             const [x, y] = position
             const machine = settingsMachine?.clone() as Machine;
             machine.direction = defaultDirection;
-            machine.player = player
+            machine.player = player;
+            machine.state = new MachineStartState(machine);
             
             board.tiles[x][y].machine = machine;
             machineArray.push(machine) // Precisa?
         }
     }
-
-    console.log('machineArray', machineArray)
 
     return machineArray;
 }

@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React, { ReactElement, ReactNode } from "react";
 import TileComponent from "../../components/TileComponent";
+import TileAvailable from "../patterns/decorator/TileAvailable";
 import TileRendered from "../patterns/decorator/TileRendered";
 import FieldType, { getFieldTypeImage } from "./FieldType";
 import Machine from "./Machine";
@@ -10,14 +11,21 @@ class Tile implements TileRendered {
     private _machine: Machine | null;
     private _type: FieldType;
     private _point: Point;
+    private _available: Boolean;
 
     constructor(machine: Machine | null, type: FieldType, point: Point) {
         this._machine = machine;
         this._type = type;
         this._point = point;
+        this._available = false;
     }
 
     draw(height: number, children: ReactNode): ReactElement {
+        // let component: = <TileComponent height={height} image={getFieldTypeImage(this._type)}>{children}</TileComponent>
+        // if (this._available) {
+        //     component = new TileAvailable(component)
+        // }
+
         return (
             <TileComponent height={height} image={getFieldTypeImage(this._type)}>{children}</TileComponent>
         )
@@ -41,6 +49,18 @@ class Tile implements TileRendered {
 
     get type(): FieldType {
         return this._type;
+    }
+
+    set available(available: Boolean) {
+        this._available = available;
+    }
+
+    get available(): Boolean {
+        return this._available;
+    }
+
+    setOptMachine(machine: Machine | null) {
+        this._machine = machine;
     }
 }
 

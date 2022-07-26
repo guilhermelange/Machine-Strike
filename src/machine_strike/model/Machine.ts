@@ -1,12 +1,15 @@
+import Settings from "../global/Settings";
 import MachineStartState from "../patterns/state/MachineStartState";
 import MachineState from "../patterns/state/MachineStats";
 import Direction, { nextDirection } from "./Direction";
 import Player from "./Player";
+import Point from "./Point";
+import Tile from "./Tile";
 
 interface ConstructorOf<T> {
     new(): T;
 }
-class Machine {
+abstract class Machine {
     private _name: string;
     private _attackPower: number;
     private _attackDistance: number;
@@ -125,6 +128,21 @@ class Machine {
         this._state = state;
     }
 
+    abstract description(): string;
+
+    getCombatPower(tile: Tile, attackDirection: Direction | null = null): number {
+        const settings = Settings.getInstance()
+        const roundPlayer = settings.player
+        let combatPower = +tile.type
+        
+        if (this._player != roundPlayer)  {
+            // defesa
+        } else {
+            combatPower += +this.attackPower;
+        }
+        return combatPower
+    }
+
     changeDirection() {
         this._direction = nextDirection(this._direction)
     }
@@ -143,6 +161,17 @@ class Machine {
 
         return cloneObject;
     }
+
+    // State Begin
+    canAttack(machinePoint: Point, tiles: Tile[][]) {
+        return this.state.canAttack(machinePoint, tiles).length > 0;
+    }
+
+   
+    attack(machinePoint: Point, tiles: Tile[][]) {
+        return this.state.attack(machinePoint, tiles);
+    }
+    // State End
 
     toString(): string {
         return this.cls.name;

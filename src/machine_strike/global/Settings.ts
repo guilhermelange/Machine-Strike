@@ -13,6 +13,8 @@ class Settings {
         this._boardFile = "";
         this._inventoryFile = "";
         this._playerMachines = new Map<Player, Machine[]>();
+        this._player = Player.Player1;
+        this._playerScore = [0, 0]
     }
 
     private _machines: Map<String, Machine>;
@@ -21,6 +23,8 @@ class Settings {
     private _boardFile: string;
     private _inventoryFile: string;
     private _playerMachines: Map<Player, Machine[]>
+    private _player: Player;
+    private _playerScore: number[];
 
     public static getInstance(): Settings {
         if (this._instance == undefined) {
@@ -30,6 +34,13 @@ class Settings {
         return this._instance
     }
 
+    public get player() : Player {
+        return this._player;
+    }
+
+    public set player(player: Player) {
+        this._player = player;
+    }
     
     public get board() : Board {
         return this._board;
@@ -69,6 +80,13 @@ class Settings {
         this._boardFile = board_file;
     }
 
+    public get playerScore() : number[] {
+        return this._playerScore;
+    }
+    
+    public set playerScore(score : number[]) {
+        this._playerScore = score;
+    }
     
     public set machines_file(machines_file : string) {
         this._machinesFile = machines_file;
@@ -80,6 +98,11 @@ class Settings {
 
     public set player_machines(player_machines : Map<Player, Machine[]>) {
         this._playerMachines = player_machines;
+    }
+
+    resetMatch() {
+        this._player = Player.Player1;
+        this._playerScore = [0, 0]
     }
 } 
 

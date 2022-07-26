@@ -1,6 +1,6 @@
 import { Container, Flex, Grid, GridItem, Heading, Text, useColorModeValue, useForceUpdate, VStack } from "@chakra-ui/react";
 import Router from "next/router";
-import { ReactNode, useLayoutEffect, useReducer, useRef, useState } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import FieldTerrainInformation from "../components/FieldTerrainInformation";
 import MachineInformation from "../components/MachineInformation";
@@ -34,8 +34,7 @@ export default function GameView() {
 
     const playerRef = useRef(Player.Player1)
     const [player, setPlayer] = useState(playerRef.current);
-    const [player1Score, setPlayer1Score] = useState(0);
-    const [player2Score, setPlayer2Score] = useState(0);
+    const [playerScore, setPlayerScore] = useState([0, 0]);
 
     useLayoutEffect(() => {
         if (ref.current) {
@@ -90,6 +89,7 @@ export default function GameView() {
 
     const nextRound = () => {
         playerRef.current = (playerRef.current == Player.Player1) ? Player.Player2 : Player.Player1;
+        settings.player = playerRef.current;
         setPlayer(playerRef.current)
     }
 
@@ -97,9 +97,18 @@ export default function GameView() {
     const attack = (pointMachine: Point) => {
         const [x, y] = pointMachine.coor
         const machine: Machine = tiles.current[x][y].machine
-        if (machine) {
-            console.log(machine.state.canAttack(pointMachine, tiles.current))
-        }
+        if (machine && machine.player == playerRef.current) {
+            machine.attack(pointMachine, tiles.current)
+            const winner = board.current.verifyDeadMachines();
+            setPlayerScore(settings.playerScore)
+            forceUpdate();
+            if (winner != null) {
+                window.alert('Ganhador: ' + getPlayerDesc(winner) + '\n Você será redicionado em 5 segundos!')
+                setTimeout(() => {
+                    Router.push('/')
+                }, 5000)
+            }
+        }    
     }
 
     const runMachine = (pointMachine: Point) => {
@@ -238,8 +247,8 @@ export default function GameView() {
                         <Text w={'100%'} mt={0}>
                             <VStack alignItems={'start'} gap={0} bgColor={'whiteAlpha.200'} p={2} rounded={6} w={'100%'}>
                                 <Text marginTop={'0 !important'} fontSize={'md'} fontWeight={'bold'}>Rodada: {getPlayerDesc(player ?? Player.Player1)}</Text>
-                                <Text marginTop={'0 !important'} fontSize={'sm'}>Jogador 1 (Pontuação): {player1Score}</Text>
-                                <Text marginTop={'0 !important'} fontSize={'sm'}>Jogador 2 (Pontuação): {player2Score}</Text>
+                                <Text marginTop={'0 !important'} fontSize={'sm'}>Jogador 1 (Pontuação): {playerScore[0]}</Text>
+                                <Text marginTop={'0 !important'} fontSize={'sm'}>Jogador 2 (Pontuação): {playerScore[1]}</Text>
                             </VStack>
                         </Text>
                         <Text w={'100%'} mt={0}>

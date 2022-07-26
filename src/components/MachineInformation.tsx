@@ -23,9 +23,9 @@ export default function MachineInformation({machine} : IMachineInformation) {
         <>
             <VStack alignItems={'start'} gap={0} bgColor={'whiteAlpha.200'} p={2} rounded={6} w={'100%'}>
                 <Text marginTop={'0 !important'} fontSize={'md'} fontWeight={'bold'}>Máquina: {machine.name}</Text>
-                <Text marginTop={'0 !important'} fontSize={'sm'}>Tipo: {machine.toString()}</Text>
+                <Text marginTop={'0 !important'} fontSize={'sm'}>Tipo: {machine.description()}</Text>
                 <Text marginTop={'0 !important'} fontSize={'sm'}>Ataque: {machine.attackPower}</Text>
-                <Text marginTop={'0 !important'} fontSize={'sm'}>Distancia Ataque: {machine.attackDistance}</Text>
+                <Text marginTop={'0 !important'} fontSize={'sm'}>Distância Ataque: {machine.attackDistance}</Text>
                 <Text marginTop={'0 !important'} fontSize={'sm'}>Vida: {machine.health}</Text>
                 <Text marginTop={'0 !important'} fontSize={'sm'}>Movimento: {machine.moveDistance}</Text>
                 <Text marginTop={'0 !important'} fontSize={'sm'}>Pontos de Vitória: {machine.victoryPoints}</Text>

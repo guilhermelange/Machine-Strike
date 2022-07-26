@@ -49,12 +49,12 @@ export function loadMachinesJs(machinesJs: MachineFormat[]): Map<String, Machine
         const machineBuilder = machineBuilders.get(machineData.type) as MachineBuilder;
         
         // Attributes
-        const attackDistance = machineData.attackDistance
-        const attackPower = machineData.attackPower
-        const health = machineData.health
-        const moveDistance = machineData.moveDistance
+        const attackDistance = +machineData.attackDistance
+        const attackPower = +machineData.attackPower
+        const health = +machineData.health
+        const moveDistance = +machineData.moveDistance
         const name = machineData.name
-        const victoryPoints = machineData.victoryPoints
+        const victoryPoints = +machineData.victoryPoints
 
         // Sides
         const sides = new Map<Direction, Side>()

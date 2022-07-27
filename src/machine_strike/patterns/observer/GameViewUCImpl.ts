@@ -20,6 +20,7 @@ class GameViewUCImpl implements GameViewUC {
     private player: Player;
     private cursorSelected: Point;
     private commandInvoker: CommandInvoker;
+    private limitCommand: number = 2;
 
     constructor() {
         this.obs = []
@@ -75,11 +76,11 @@ class GameViewUCImpl implements GameViewUC {
     pressEnter(pointer: Point): void {
         if (this.cursorSelected.x < 0) {
             const [x, y] = pointer.coor
-            if (this.tiles[x][y].machine) {
-                if ((this.tiles[x][y].machine as Machine).player == this.player) {
-                    // this.cursorSelected.x = pointer.x
-                    // this.cursorSelected.y = pointer.y
-                    // this.setMachineMoveOptions(this.cursorSelected)
+            const machine: Machine = this.tiles[x][y].machine;
+            if (machine) {
+                console.log(machine.player, this.player);
+
+                if (machine.player == this.player) {
                     const command = new EventSelectCommand(this, pointer);
                     this.commandInvoker.add(command);
                     this.commandInvoker.execute();
@@ -94,10 +95,10 @@ class GameViewUCImpl implements GameViewUC {
                 throw Error('Não há máquina no campo para selecionar') 
             }
         } else {
+            this.validadeMoveRound();
             const command = new EventMoveCommand(this, pointer);
             this.commandInvoker.add(command);
             this.commandInvoker.execute();
-            // this.moveMachine(this.cursorSelected, pointer)
             for (const item of this.obs) {
                 item.reload()
             }
@@ -133,6 +134,7 @@ class GameViewUCImpl implements GameViewUC {
     }
 
     attack(pointer: Point): void {
+        this.validadeAttackRound();
         const [x, y] = pointer.coor
         const machine: Machine = this.tiles[x][y].machine
         if (machine && machine.player == this.player) {
@@ -210,6 +212,38 @@ class GameViewUCImpl implements GameViewUC {
                     machine.state = new MachineStartState(machine);
                 }
             }
+        }
+    }
+
+    private validadeAttackRound() {
+        let count = 0;
+        for (let i = 0; i < this.tiles.length; i++) {
+            for (let j = 0; j < this.tiles[i].length; j++) {
+                const machine = this.tiles[i][j].machine as Machine
+                if (machine) {
+                    count += machine.state.getAttackCount()
+                }
+            }
+        }
+
+        if (count >= this.limitCommand) {
+            throw Error("Limite de ataques atingido. Pode ser utilizada Sobrecarga");
+        }
+    }
+    
+    private validadeMoveRound() {
+        let count = 0
+        for (let i = 0; i < this.tiles.length; i++) {
+            for (let j = 0; j < this.tiles[i].length; j++) {
+                const machine = this.tiles[i][j].machine as Machine
+                if (machine) {
+                    count += machine.state.getMoveCount();
+                }
+            }
+        }
+
+        if (count >= this.limitCommand) {
+            throw Error("Limite de movimentação atingido");
         }
     }
 }

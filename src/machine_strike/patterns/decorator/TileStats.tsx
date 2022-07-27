@@ -19,7 +19,7 @@ class TileStats extends TileDecorator {
                         <Box position={'absolute'} w={'100%'} h={'100%'}>
                             <Box position={'relative'} w={'100%'} h={'100%'}>
                                 <Box position={'absolute'} bottom={0} left={1} rounded={12} fontWeight={'bold'}>{+combatPower}</Box>
-                                <Box position={'absolute'} bottom={0} right={1} rounded={12} fontWeight={'bold'}>{machine.health}</Box>
+                                <Box position={'absolute'} bottom={0} right={1} rounded={12} fontWeight={'bold'} color={'red.400'}>{machine.health}</Box>
                             </Box>
                         </Box>
                     </>)}

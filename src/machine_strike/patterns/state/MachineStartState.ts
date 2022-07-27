@@ -4,20 +4,19 @@ import MachineOverloadState from "./MachineOverloadState";
 import MachineState from "./MachineStats";
 
 class MachineStartState extends MachineState {
-    overload(): void {
+    public overload(): void {
         if (this.attackCount > 0 || this.moveCount > 0) {
             this.machine.health -= 2;
-            this.nextState();    
+            this.nextState();
         } else {
             throw Error("Não efetuado movimento ou ataque para permitir sobrecarga.");
         }
-        
     }
     
     public attack(machinePoint: Point, tiles: Tile[][]): void {
         if (this.attackCount < 1) {
             super.attack(machinePoint, tiles);
-            if (this.moveCount = 0) {
+            if (this.moveCount <= 0) {
                 this.moveCount += 1;
             }
         } else {

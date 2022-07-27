@@ -1,4 +1,4 @@
-import { Container, Flex, Grid, GridItem, Heading, Text, useColorModeValue, useForceUpdate, useToast, VStack } from "@chakra-ui/react";
+import { Box, Container, Flex, Grid, GridItem, Heading, Text, useColorModeValue, useForceUpdate, useToast, VStack } from "@chakra-ui/react";
 import Router, { useRouter } from "next/router";
 import { ReactNode, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { IoMdArrowRoundBack } from 'react-icons/io'
@@ -114,6 +114,7 @@ export default function GameView() {
                         break;
                 }
             } catch(error) {
+                console.log(error)
                 errorMessage(error)
             }
         };
@@ -173,6 +174,7 @@ export default function GameView() {
         return tileRendered.draw(height, <></>);
     }
 
+    try {
     return (
         <Container maxW={'8xl'} h={'100vh'} pt={4} pb={4}>
             <Grid templateAreas={`"board machine"
@@ -229,6 +231,7 @@ export default function GameView() {
                                 <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>Esc</Text> - Desselecionar</Text>
                                 <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>f</Text> - Finalizar rodada</Text>
                                 <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>n</Text> - Rotacionar máquina</Text>
+                                <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>r</Text> - Sobrecarga</Text>
                                 {/* <Text marginTop={'0 !important'} fontSize={'sm'}>r - Correr</Text> */}
                                 <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>a</Text> - Atacar</Text>
                                 
@@ -242,5 +245,15 @@ export default function GameView() {
                 </Flex>
             </Grid>
         </Container>
-    )
+    ) } catch(Error) {
+        return (
+            <Container  maxW={'8xl'} h={'100vh'} pt={4} pb={4}>
+                <Box>
+                    <Text cursor={'pointer'}>Erro ao carregar conteúdo. Retorne à tela inicial: 
+                        <Text onClick={handleRedirect} display={'inline'}><IoMdArrowRoundBack></IoMdArrowRoundBack></Text>
+                    </Text>
+                 </Box>
+            </Container>
+        )
+    }
 }

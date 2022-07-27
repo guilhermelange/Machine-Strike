@@ -45,7 +45,7 @@ abstract class MachineState {
             }
             this.attackCount += 1
         } else {
-            throw Error("Não localizada máquina para ataque")
+            throw Error("Não localizada máquina para atacar no range")
         }
     }
 
@@ -54,10 +54,12 @@ abstract class MachineState {
     public canAttack(machinePoint: Point, tiles: Tile[][]): Point[] {
         const machines = [] as Point[];
         const [x, y] = machinePoint.coor;
+        
 
         const machine = this.machine
         const direction = machine.direction
         let count = 0
+        console.log(machine.direction)
 
         switch (direction) {
             case Direction.NORTH:
@@ -77,7 +79,7 @@ abstract class MachineState {
                     count++
                 }
 
-            case Direction.EAST:
+            case Direction.WEST:
                 for (let j = y; j < tiles.length && count <= machine.attackDistance; j++) {
                     const tileMachine = tiles[x][j].machine as Machine
                     if (tileMachine && tileMachine.player != machine.player) {
@@ -85,7 +87,7 @@ abstract class MachineState {
                     }
                     count++
                 }
-            case Direction.WEST:
+            case Direction.EAST:
                 for (let j = y; j >= 0 && count <= machine.attackDistance; j--) {
                     const tileMachine = tiles[x][j].machine as Machine
                     if (tileMachine && tileMachine.player != machine.player) {
@@ -97,12 +99,15 @@ abstract class MachineState {
         return machines;
     }
 
-    protected getCommands(machinePoint: Point, tiles: Tile[]): string[] {
-        const commands = [] as string[];
-        return commands
-    }
-
     protected nextState() {}
+
+    public getMoveCount(): number {
+        return this.moveCount;
+    }
+    
+    public getAttackCount(): number {
+        return this.attackCount;
+    }
 }
 
 export default MachineState

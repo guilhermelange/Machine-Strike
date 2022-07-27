@@ -22,7 +22,7 @@ class MyDocument extends Document {
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
         </Head>
         <body>
-          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+          <ColorModeScript initialColorMode={'dark'} />
           <Main />
           <NextScript />
         </body>

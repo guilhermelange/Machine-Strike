@@ -1,17 +1,11 @@
 import Point from "../../model/Point";
 import Tile from "../../model/Tile";
-import MachineOverloadState from "./MachineOverloadState";
+import MachineStartState from "./MachineStartState";
 import MachineState from "./MachineStats";
 
-class MachineStartState extends MachineState {
+class MachineOverloadState extends MachineState {
     overload(): void {
-        if (this.attackCount > 0 || this.moveCount > 0) {
-            this.machine.health -= 2;
-            this.nextState();    
-        } else {
-            throw Error("Não efetuado movimento ou ataque para permitir sobrecarga.");
-        }
-        
+        throw new Error("Máquina já encontra-se em sobrecarga.");
     }
     
     public attack(machinePoint: Point, tiles: Tile[][]): void {
@@ -23,7 +17,6 @@ class MachineStartState extends MachineState {
         } else {
             throw Error("Necessário sobrecarga para efetuar ataque");
         }
-        
     }
 
     public move(machinePoint: Point, pointDestine: Point, tiles: Tile[][]): void {
@@ -31,13 +24,13 @@ class MachineStartState extends MachineState {
             super.move(machinePoint, pointDestine, tiles);
         } else {
             throw Error("Necessário sobrecarga para efetuar movimento");
-        }   
+        }
     }
 
     protected nextState(): void {
-        this.machine.state = new MachineOverloadState(this.machine);
+        this.machine.state = new MachineStartState(this.machine);
     }
     
 }
 
-export default MachineStartState
+export default MachineOverloadState

@@ -69,9 +69,7 @@ class Board {
 
         settings.playerScore = [player1Score, player2Score];
         
-        console.log('score', countUser1, countUser2)
         if (countUser2 == 0 || player1Score >= 7) {
-            console.log('entrou 01')
             return Player.Player1;
         }
 

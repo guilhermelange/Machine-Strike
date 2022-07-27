@@ -4,6 +4,10 @@ import Machine from "../../model/Machine";
 import Player from "../../model/Player";
 import Point from "../../model/Point";
 import Tile from "../../model/Tile";
+import CommandInvoker from "../command/CommandInvoker";
+import EventMoveCommand from "../command/EventMoveCommand";
+import EventSelectCommand from "../command/EventSelectCommand";
+import MachineStartState from "../state/MachineStartState";
 import GameViewObserver from "./GameViewObserver";
 import GameViewUC from "./GameViewUC";
 
@@ -11,11 +15,11 @@ import GameViewUC from "./GameViewUC";
 const settings = Settings.getInstance()
 class GameViewUCImpl implements GameViewUC {
     private obs: GameViewObserver[];
-
     private board: Board;
     private tiles: Tile[][]
     private player: Player;
     private cursorSelected: Point;
+    private commandInvoker: CommandInvoker;
 
     constructor() {
         this.obs = []
@@ -23,6 +27,32 @@ class GameViewUCImpl implements GameViewUC {
         this.board = settings.board;
         this.tiles = this.board.tiles;
         this.cursorSelected = new Point(-1, -1);
+        this.commandInvoker = new CommandInvoker();
+    }
+
+    get cursor(): Point {
+        return this.cursorSelected;
+    }
+
+    overload(pointer: Point): void {
+        const [x,y] = pointer.coor
+        const machine = this.tiles[x][y].machine as Machine
+        if (machine) {
+            machine.overload();
+            for (const item of this.obs) {
+                item.reload()
+            }
+        } else {
+            throw Error("Máquina não localizada")
+        }
+    }
+
+    escape(): void {
+        this.commandInvoker.undo();
+        for (const item of this.obs) {
+            item.reload()
+        }
+        this.commandInvoker = new CommandInvoker();
     }
 
     update(): void {
@@ -35,6 +65,7 @@ class GameViewUCImpl implements GameViewUC {
     nextRound(): void {
         this.player = (this.player == Player.Player1) ? Player.Player2 : Player.Player1;
         settings.player = this.player;
+        this.resetMachineState();
 
         for (const item of this.obs) {
             item.updatePlayer(this.player)
@@ -46,9 +77,13 @@ class GameViewUCImpl implements GameViewUC {
             const [x, y] = pointer.coor
             if (this.tiles[x][y].machine) {
                 if ((this.tiles[x][y].machine as Machine).player == this.player) {
-                    this.cursorSelected.x = pointer.x
-                    this.cursorSelected.y = pointer.y
-                    this.setMachineMoveOptions(this.cursorSelected)
+                    // this.cursorSelected.x = pointer.x
+                    // this.cursorSelected.y = pointer.y
+                    // this.setMachineMoveOptions(this.cursorSelected)
+                    const command = new EventSelectCommand(this, pointer);
+                    this.commandInvoker.add(command);
+                    this.commandInvoker.execute();
+
                     for (const item of this.obs) {
                         item.reload()
                     }
@@ -59,10 +94,14 @@ class GameViewUCImpl implements GameViewUC {
                 throw Error('Não há máquina no campo para selecionar') 
             }
         } else {
-            this.moveMachine(this.cursorSelected, pointer)
+            const command = new EventMoveCommand(this, pointer);
+            this.commandInvoker.add(command);
+            this.commandInvoker.execute();
+            // this.moveMachine(this.cursorSelected, pointer)
             for (const item of this.obs) {
                 item.reload()
             }
+            this.commandInvoker = new CommandInvoker();
         }
     }
 
@@ -121,7 +160,7 @@ class GameViewUCImpl implements GameViewUC {
         this.obs = this.obs.filter(item => item != observer)
     }
 
-    private setMachineMoveOptions(pointMachine: Point) {
+    public setMachineMoveOptions(pointMachine: Point) {
         const [x, y] = pointMachine.coor
         const machine: Machine = this.tiles[x][y].machine
         let limitDistance = machine.moveDistance
@@ -139,24 +178,37 @@ class GameViewUCImpl implements GameViewUC {
         }
     }
 
-    private moveMachine(pointMachine: Point, pointDestine: Point) {
+    public moveMachine(pointMachine: Point, pointDestine: Point) {
         const [x, y] = pointMachine.coor
         const [i, j] = pointDestine.coor
         const machine: Machine = this.tiles[x][y].machine
         if (machine && !pointMachine.equals(pointDestine) && this.tiles[i][j].available) {
-            this.tiles[i][j].machine = machine
-            this.tiles[x][y].setOptMachine(null)
+            machine.move(pointMachine, pointDestine, this.tiles);
+            
             this.cursorSelected.x = -1
             this.cursorSelected.y = -1
             this.resetMachineMoveOptions();
+        } else {
+            throw Error('Máquina não localizada ou campo não disponível!')
         }
     }
 
-    private resetMachineMoveOptions() {
+    public resetMachineMoveOptions() {
         for (let i = 0; i < this.tiles.length; i++) {
             for (let j = 0; j < this.tiles[i].length; j++) {
                 const tile = this.tiles[i][j]
                 tile.available = false;
+            }
+        }
+    }
+
+    private resetMachineState() {
+        for (let i = 0; i < this.tiles.length; i++) {
+            for (let j = 0; j < this.tiles[i].length; j++) {
+                const machine = this.tiles[i][j].machine as Machine
+                if (machine) {
+                    machine.state = new MachineStartState(machine);
+                }
             }
         }
     }

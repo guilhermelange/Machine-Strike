@@ -14,6 +14,15 @@ abstract class MachineState {
         this.moveCount = 0;
     }
 
+    public move(machinePoint: Point, pointDestine: Point, tiles: Tile[][]) {
+        const [x, y] = machinePoint.coor
+        const [i, j] = pointDestine.coor
+
+        tiles[i][j].machine = this.machine
+        tiles[x][y].setOptMachine(null)
+        this.moveCount += 1;
+    }
+
     public attack(machinePoint: Point, tiles: Tile[][]) {
         const machinesToAttack = this.canAttack(machinePoint, tiles)
         const [x, y] = machinePoint.coor;
@@ -34,8 +43,13 @@ abstract class MachineState {
             } else {
                 this.machine.health -= attackDiff;
             }
+            this.attackCount += 1
+        } else {
+            throw Error("Não localizada máquina para ataque")
         }
     }
+
+    abstract overload(): void;
 
     public canAttack(machinePoint: Point, tiles: Tile[][]): Point[] {
         const machines = [] as Point[];

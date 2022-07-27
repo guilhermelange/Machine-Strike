@@ -169,7 +169,15 @@ abstract class Machine {
 
    
     attack(machinePoint: Point, tiles: Tile[][]) {
-        return this.state.attack(machinePoint, tiles);
+        this.state.attack(machinePoint, tiles);
+    }
+
+    move(machinePoint: Point, pointDestine: Point, tiles: Tile[][]) {
+        this.state.move(machinePoint, pointDestine, tiles);
+    }
+
+    overload() {
+        this.state.overload();
     }
     // State End
 

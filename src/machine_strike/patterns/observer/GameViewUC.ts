@@ -4,15 +4,19 @@ import GameViewObserver from "./GameViewObserver";
 interface GameViewUC {
     update(): void;
 
+    overload(pointer: Point): void
+
+    escape(): void;
+
     nextRound(): void;
 
-    pressEnter(pointer: Point): void | never;
+    pressEnter(pointer: Point): void;
 
-    changeDirection(pointer: Point): void | never;
+    changeDirection(pointer: Point): void;
 
     run(pointer: Point): void;
 
-    attack(pointer: Point): void | never;
+    attack(pointer: Point): void;
 
     addObserver(obs: GameViewObserver) : void;
 

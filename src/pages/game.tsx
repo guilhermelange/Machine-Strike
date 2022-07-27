@@ -94,6 +94,9 @@ export default function GameView() {
                     case 'ArrowLeft':
                         moveCursor(i, j - 1)
                         break;
+                    case 'r':
+                        controller.overload(cursor.current);
+                        break;
                     case 'f':
                         controller.nextRound()
                         break;
@@ -105,6 +108,9 @@ export default function GameView() {
                         break;
                     case 'Enter':
                         controller.pressEnter(cursor.current);
+                        break;
+                    case 'Escape':
+                        controller.escape();
                         break;
                 }
             } catch(error) {
@@ -135,6 +141,11 @@ export default function GameView() {
             isClosable: true,
             position: 'bottom-right'
         })
+    }
+
+    const handleRedirect = () => {
+        window.localStorage.setItem("reload", "true")
+        Router.push('/')
     }
 
     const moveCursor = (i: number, j: number) => {
@@ -213,15 +224,20 @@ export default function GameView() {
                         </Text>
                         <Text w={'100%'} mt={0}>
                             <VStack alignItems={'start'} gap={0} bgColor={'whiteAlpha.200'} p={2} rounded={6} w={'100%'}>
-                                <Text marginTop={'0 !important'} fontSize={'sm'}>f - Finalizar Rodada</Text>
-                                <Text marginTop={'0 !important'} fontSize={'sm'}>n - Rotacionar</Text>
-                                <Text marginTop={'0 !important'} fontSize={'sm'}>r - Correr</Text>
-                                <Text marginTop={'0 !important'} fontSize={'sm'}>a - Atacar</Text>
+                                <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>Setas</Text> - Movimentar cursor</Text>
+                                <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>Enter</Text> - Selecionar / Mover</Text>
+                                <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>Esc</Text> - Desselecionar</Text>
+                                <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>f</Text> - Finalizar rodada</Text>
+                                <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>n</Text> - Rotacionar máquina</Text>
+                                {/* <Text marginTop={'0 !important'} fontSize={'sm'}>r - Correr</Text> */}
+                                <Text marginTop={'0 !important'} fontSize={'sm'}><Text fontWeight={'bold'} display={'inline'}>a</Text> - Atacar</Text>
+                                
+                                
                             </VStack>
                         </Text>
                     </VStack>
                 </GridItem>
-                <Flex position={'absolute'} top={3} left={3} w={''} alignItems={'flex-end'} cursor={'pointer'} onClick={() => { Router.push('/') }}>
+                <Flex position={'absolute'} top={3} left={3} w={''} alignItems={'flex-end'} cursor={'pointer'} onClick={handleRedirect}>
                     <IoMdArrowRoundBack></IoMdArrowRoundBack>
                 </Flex>
             </Grid>

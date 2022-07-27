@@ -18,6 +18,11 @@ controller.addObserver(manager);
 const settings = Settings.getInstance()
 
 export default function Index() {
+  const { colorMode, toggleColorMode } = useColorMode()
+  if (colorMode != 'dark') {
+    toggleColorMode();
+  }
+
   const toast = useToast()
   const {
     handleSubmit,

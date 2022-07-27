@@ -1,0 +1,152 @@
+[
+	{
+		"type": "MELEE",
+		"name": "Peon",
+		"attackPower": 2,
+		"attackDistance": 1,
+		"moveDistance": 2,
+		"victoryPoints": 1,
+		"health": 4,
+		"sides": {
+			"NORTH": "DEFAULT",
+			"SOUTH": "DEFAULT",
+			"WEST": "WEAK",
+			"EAST": "ARMORED"
+		}
+	},
+	{
+		"type": "MELEE",
+		"name": "Spades",
+		"attackPower": 2,
+		"attackDistance": 1,
+		"moveDistance": 2,
+		"victoryPoints": 1,
+		"health": 5,
+		"sides": {
+			"NORTH": "ARMORED",
+			"SOUTH": "WEAK",
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
+		}
+	},
+	{
+		"type": "GUNNER",
+		"name": "Bishop",
+		"attackPower": 2,
+		"attackDistance": 2,
+		"moveDistance": 3,
+		"victoryPoints": 1,
+		"health": 1,
+		"sides": {
+			"NORTH": "ARMORED",
+			"SOUTH": "WEAK",
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
+		}
+	},
+	{
+		"type": "RAM",
+		"name": "Knight",
+		"attackPower": 1,
+		"attackDistance": 1,
+		"moveDistance": 2,
+		"victoryPoints": 1,
+		"health": 4,
+		"sides": {
+			"NORTH": "ARMORED",
+			"SOUTH": "WEAK",
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
+		}
+	},
+	{
+		"type": "RAM",
+		"name": "Hearts",
+		"attackPower": 2,
+		"attackDistance": 1,
+		"moveDistance": 2,
+		"victoryPoints": 2,
+		"health": 5,
+		"sides": {
+			"NORTH": "ARMORED",
+			"SOUTH": "WEAK",
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
+		}
+	},
+	{
+		"type": "DASH",
+		"name": "Tower",
+		"attackPower": 2,
+		"attackDistance": 3,
+		"moveDistance": 3,
+		"victoryPoints": 1,
+		"health": 4,
+		"sides": {
+			"NORTH": "ARMORED",
+			"SOUTH": "WEAK",
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
+		}
+	},
+	{
+		"type": "DASH",
+		"name": "Diamonds",
+		"attackPower": 3,
+		"attackDistance": 2,
+		"moveDistance": 2,
+		"victoryPoints": 3,
+		"health": 10,
+		"sides": {
+			"NORTH": "ARMORED",
+			"SOUTH": "WEAK",
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
+		}
+	},
+	{
+		"type": "SWOOP",
+		"name": "Queen",
+		"attackPower": 2,
+		"attackDistance": 3,
+		"moveDistance": 2,
+		"victoryPoints": 2,
+		"health": 6,
+		"sides": {
+			"NORTH": "ARMORED",
+			"SOUTH": "WEAK",
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
+		}
+	},
+	{
+		"type": "PULL",
+		"name": "King",
+		"attackPower": 3,
+		"attackDistance": 3,
+		"moveDistance": 2,
+		"victoryPoints": 2,
+		"health": 7,
+		"sides": {
+			"NORTH": "ARMORED",
+			"SOUTH": "WEAK",
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
+		}
+	},
+	{
+		"type": "SWOOP",
+		"name": "Clubs",
+		"attackPower": 3,
+		"attackDistance": 3,
+		"moveDistance": 2,
+		"victoryPoints": 3,
+		"health": 10,
+		"sides": {
+			"NORTH": "ARMORED",
+			"SOUTH": "WEAK",
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
+		}
+	}
+]

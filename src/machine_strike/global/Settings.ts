@@ -101,8 +101,7 @@ class Settings {
     }
 
     resetMatch() {
-        this._player = Player.Player1;
-        this._playerScore = [0, 0]
+        Settings._instance = new Settings();
     }
 } 
 

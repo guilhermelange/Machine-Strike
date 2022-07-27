@@ -1,10 +1,11 @@
-import { Container, Flex, Grid, GridItem, Heading, Text, useColorModeValue, useForceUpdate, useToast, VStack } from "@chakra-ui/react";
-import Router, { useRouter } from "next/router";
+import { Container, Flex, Grid, GridItem, Heading, Text, useColorModeValue, useForceUpdate, VStack } from "@chakra-ui/react";
+import Router from "next/router";
 import { ReactNode, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import FieldTerrainInformation from "../components/FieldTerrainInformation";
 import MachineInformation from "../components/MachineInformation";
 import Settings from "../machine_strike/global/Settings";
+import Machine from "../machine_strike/model/Machine";
 import Player, { getPlayerDesc } from "../machine_strike/model/Player";
 import Point from "../machine_strike/model/Point";
 import Tile from "../machine_strike/model/Tile";
@@ -13,65 +14,27 @@ import TileCursor from "../machine_strike/patterns/decorator/TileCursor";
 import TileMachine from "../machine_strike/patterns/decorator/TileMachine";
 import TileRendered from "../machine_strike/patterns/decorator/TileRendered";
 import TileStats from "../machine_strike/patterns/decorator/TileStats";
-import GameViewObserver from "../machine_strike/patterns/observer/GameViewObserver";
-import GameViewUCImpl from "../machine_strike/patterns/observer/GameViewUCImpl";
+import Game from "../machine_strike/patterns/state/Game";
 
-class GameManager implements GameViewObserver  {
-    updateScore(score: number[]): void {}
-    winner(player: Player): void {}
-    reload(): void {}
-    updatePlayer(player: Player): void {}
-}  
-
-const manager: GameManager = new GameManager();
-let controller = new GameViewUCImpl();
-controller.addObserver(manager);
-const settings = Settings.getInstance()
+const game = new Game();
 
 export default function GameView() {
-    // React Utils
     const formBackground = useColorModeValue('gray.100', 'gray.700')
     const ref = useRef<HTMLDivElement>(null);
     const [height, setHeight] = useState(0);
-    const toast = useToast()
 
+    // Lógica
+    const settings = Settings.getInstance();
     const board = useRef(settings.board)
     const tiles = useRef(board.current.tiles);
     const cursor = useRef(new Point(7, 4))
     const [cursorState, setCursorState] = useState(new Point(7, 4))
+    const cursorSelected = useRef(new Point(-1, -1))
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     const playerRef = useRef(Player.Player1)
     const [player, setPlayer] = useState(playerRef.current);
     const [playerScore, setPlayerScore] = useState([0, 0]);
-
-    useLayoutEffect(() => {
-        manager.updatePlayer = (currentPlayer: Player) => {
-            playerRef.current = currentPlayer
-            setPlayer(playerRef.current )   
-        }
-
-        manager.reload = () => {
-            forceUpdate();
-        }
-
-        manager.updateScore = (score: number[]) => {
-            setPlayerScore(score);
-        }
-
-        manager.winner = (player: Player) => {
-            const message = `Vencedor: ${getPlayerDesc(player)}!!!`
-            successMessage(message);
-            successMessage("Você será redirecionado para o Start em 10 segundos.")
-            settings.resetMatch();
-            setTimeout(() => {
-                Router.push('/')
-            }, 10000)
-            window.localStorage.setItem("reload", "true")
-        }
-        
-        controller.update()
-    }, [])
 
     useLayoutEffect(() => {
         if (ref.current) {
@@ -80,61 +43,138 @@ export default function GameView() {
 
         window.onkeyup = (event) => {
             const [i, j] = cursor.current.coor
-            try {
-                switch (event.key) {
-                    case 'ArrowUp':
-                        moveCursor(i - 1, j)
-                        break;
-                    case 'ArrowRight':
-                        moveCursor(i, j + 1)
-                        break;
-                    case 'ArrowDown':
-                        moveCursor(i + 1, j)
-                        break;
-                    case 'ArrowLeft':
-                        moveCursor(i, j - 1)
-                        break;
-                    case 'f':
-                        controller.nextRound()
-                        break;
-                    case 'n':
-                        controller.changeDirection(cursor.current);
-                        break;
-                    case 'a':
-                        controller.attack(cursor.current)
-                        break;
-                    case 'Enter':
-                        controller.pressEnter(cursor.current);
-                        break;
-                }
-            } catch(error) {
-                errorMessage(error)
+            switch (event.key) {
+                case 'ArrowUp':
+                    moveCursor(i - 1, j)
+                    break;
+                case 'ArrowRight':
+                    moveCursor(i, j + 1)
+                    break;
+                case 'ArrowDown':
+                    moveCursor(i + 1, j)
+                    break;
+                case 'ArrowLeft':
+                    moveCursor(i, j - 1)
+                    break;
+                case 'f':
+                    nextRound()
+                    break;
+                case 'n':
+                    changeMachineDirection(cursor.current)
+                    break;
+                case 'r':
+                    runMachine(cursorSelected.current)
+                    break;
+                case 'a':
+                    attack(cursor.current)
+                    break;
+
+                case 'Enter':
+                    if (cursorSelected.current.x < 0) {
+                        const [x, y] = cursor.current.coor
+                        if (tiles.current[x][y].machine && (tiles.current[x][y].machine as Machine).player == playerRef.current) {
+                            cursorSelected.current.x = cursor.current.x
+                            cursorSelected.current.y = cursor.current.y
+                            setMachineMoveOptions(cursorSelected.current, false)
+                            forceUpdate();
+                        }
+                    } else {
+                        moveMachine(cursorSelected.current, cursor.current)
+                        forceUpdate();
+                    }
+                    break;
             }
         };
     }, []);
 
-    useEffect(() => {
-        forceUpdate();
-    }, [])
-
-    const errorMessage = (error: any) => {
-        toast({
-            description: "" + error,
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-            position: 'bottom-right'
-        })
+    const nextRound = () => {
+        playerRef.current = (playerRef.current == Player.Player1) ? Player.Player2 : Player.Player1;
+        settings.player = playerRef.current;
+        setPlayer(playerRef.current)
     }
 
-    const successMessage = (message: string) => {
-        toast({
-            description: message,
-            status: 'success',
-            duration: 4000,
-            isClosable: true,
-            position: 'bottom-right'
-        })
+
+    const attack = (pointMachine: Point) => {
+        const [x, y] = pointMachine.coor
+        const machine: Machine = tiles.current[x][y].machine
+        if (machine && machine.player == playerRef.current) {
+            machine.attack(pointMachine, tiles.current)
+            const winner = board.current.verifyDeadMachines();
+            setPlayerScore(settings.playerScore)
+            forceUpdate();
+            if (winner != null) {
+                window.alert('Ganhador: ' + getPlayerDesc(winner) + '\n Você será redicionado em 5 segundos!')
+                setTimeout(() => {
+                    Router.push('/')
+                }, 5000)
+            }
+        }    
+    }
+
+    const runMachine = (pointMachine: Point) => {
+        const [x, y] = pointMachine.coor
+        if (x >= 0) {
+            const machine: Machine = tiles.current[x][y].machine
+            if (machine) {
+                setMachineMoveOptions(pointMachine, true)
+            }
+        }
+    }
+
+    const setMachineMoveOptions = (pointMachine: Point, run: Boolean = false) =>  {
+        const [x, y] = pointMachine.coor
+        const machine: Machine = tiles.current[x][y].machine
+        let limitDistance = machine.moveDistance
+        if (run) {
+            limitDistance += 1
+        }
+        
+        if (machine) {
+            for (let i = 0; i < tiles.current.length; i++) {
+                for (let j = 0; j < tiles.current[i].length; j++) {
+                    const tile = tiles.current[i][j]
+                    const tileDistance = Math.abs(pointMachine.x - tile.point.x) + Math.abs(pointMachine.y - tile.point.y)
+                    if (tileDistance <= limitDistance && !tile.machine) {
+                        tile.available = true;
+                    }
+                }
+            }
+        }
+    }
+
+    const resetMachineMoveOptions = () => {
+        for (let i = 0; i < tiles.current.length; i++) {
+            for (let j = 0; j < tiles.current[i].length; j++) {
+                const tile = tiles.current[i][j]
+                tile.available = false;
+            }
+        }
+    }
+
+    const moveMachine = (pointMachine: Point, pointDestine: Point) => {
+        const [x, y] = pointMachine.coor
+        const [i, j] = pointDestine.coor
+        const machine: Machine = tiles.current[x][y].machine
+        if (machine && !pointMachine.equals(pointDestine) && tiles.current[i][j].available) {
+            tiles.current[i][j].machine = machine
+            tiles.current[x][y].setOptMachine(null)
+            cursorSelected.current.x = -1
+            cursorSelected.current.y = -1
+            resetMachineMoveOptions();
+        }
+    }
+
+    const changeMachineDirection = (pointDestine: Point) => {
+        const [x,y] = cursor.current.coor;
+        const machine: Machine = tiles.current[x][y].machine
+        if (machine) {
+            machine.changeDirection()
+            
+            // Force render state
+            cursor.current.x = pointDestine.x
+            cursor.current.y = pointDestine.y
+            setCursorState(new Point(pointDestine.x, pointDestine.y))
+        }
     }
 
     const moveCursor = (i: number, j: number) => {

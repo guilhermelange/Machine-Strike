@@ -8,6 +8,8 @@ class MachineStartState extends MachineState {
         super.attack(machinePoint, tiles);
         this.attackCount += 1
     }
+
+    
 }
 
 export default MachineStartState

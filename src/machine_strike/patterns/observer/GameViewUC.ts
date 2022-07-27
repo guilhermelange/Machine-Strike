@@ -1,16 +1,22 @@
 import Point from "../../model/Point";
-import IndexViewObserver from "./IndexViewObserver";
+import GameViewObserver from "./GameViewObserver";
 
 interface GameViewUC {
+    update(): void;
+
+    nextRound(): void;
+
     pressEnter(pointer: Point): void | never;
 
-    nextRound(): void | never;
+    changeDirection(pointer: Point): void | never;
 
-    changeMachineDirection(pointer: Point): void | never;
+    run(pointer: Point): void;
 
-    addObserver(obs: IndexViewObserver) : void;
+    attack(pointer: Point): void | never;
 
-    removeObserver(obs: IndexViewObserver) : void;
+    addObserver(obs: GameViewObserver) : void;
+
+    removeObserver(obs: GameViewObserver) : void;
 }
 
 export default GameViewUC

@@ -1,6 +1,6 @@
 import { Button, Center, Container, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, Text, useColorMode, useColorModeValue, useDisclosure, useToast, VStack } from '@chakra-ui/react'
 import Router from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect, useReducer } from 'react'
 import { useForm } from 'react-hook-form'
 import { MdHelpOutline } from 'react-icons/md'
 import Settings from '../machine_strike/global/Settings'
@@ -9,14 +9,7 @@ import IndexViewUCImpl from '../machine_strike/patterns/observer/IndexViewUCImpl
 
 // Observer
 class IndexManager implements IndexViewObserver  {
-  play(): void {
-    this.playCallback();
-  }
-
-  playCallback(): void {
-    // Necessário para executar o método dentro da function Index
-    // Sobrescrito
-  };
+  play(): void {}
 }
 
 const manager: IndexManager = new IndexManager();
@@ -34,10 +27,19 @@ export default function Index() {
 
   const formBackground = useColorModeValue('gray.100', 'gray.700')
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
-  useEffect(() => {
-    manager.playCallback = () => {
+  useLayoutEffect(() => {
+    manager.play = () => {
       Router.push('game')
+    }
+  }, [])
+  
+  useEffect(() => {
+    if (window.localStorage.getItem("reload") == "true") {
+      window.localStorage.setItem("reload", "carregado");
+      window.location.reload();
+      forceUpdate();
     }
   }, [])
 

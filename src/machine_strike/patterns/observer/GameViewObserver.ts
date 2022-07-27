@@ -1,5 +1,10 @@
+import Player from "../../model/Player";
+
 interface GameViewObserver {
-    play(): void;
+    updatePlayer(player: Player): void;
+    reload(): void;
+    updateScore(score: number[]): void
+    winner(player: Player): void;
 }
 
 export default GameViewObserver

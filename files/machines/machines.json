@@ -1,7 +1,7 @@
 [
 	{
 		"type": "MELEE",
-		"name": "Peon",
+		"name": "Fighter",
 		"attackPower": 2,
 		"attackDistance": 1,
 		"moveDistance": 2,
@@ -10,13 +10,13 @@
 		"sides": {
 			"NORTH": "DEFAULT",
 			"SOUTH": "DEFAULT",
-			"WEST": "WEAK",
-			"EAST": "ARMORED"
+			"WEST": "DEFAULT",
+			"EAST": "DEFAULT"
 		}
 	},
 	{
 		"type": "MELEE",
-		"name": "Spades",
+		"name": "Lancer",
 		"attackPower": 2,
 		"attackDistance": 1,
 		"moveDistance": 2,
@@ -31,7 +31,7 @@
 	},
 	{
 		"type": "GUNNER",
-		"name": "Bishop",
+		"name": "Shooter",
 		"attackPower": 2,
 		"attackDistance": 2,
 		"moveDistance": 3,
@@ -40,8 +40,8 @@
 		"sides": {
 			"NORTH": "ARMORED",
 			"SOUTH": "WEAK",
-			"WEST": "DEFAULT",
-			"EAST": "DEFAULT"
+			"WEST": "WEAK",
+			"EAST": "WEAK"
 		}
 	},
 	{
@@ -54,14 +54,14 @@
 		"health": 4,
 		"sides": {
 			"NORTH": "ARMORED",
-			"SOUTH": "WEAK",
-			"WEST": "DEFAULT",
-			"EAST": "DEFAULT"
+			"SOUTH": "DEFAULT",
+			"WEST": "WEAK",
+			"EAST": "WEAK"
 		}
 	},
 	{
 		"type": "RAM",
-		"name": "Hearts",
+		"name": "Ram",
 		"attackPower": 2,
 		"attackDistance": 1,
 		"moveDistance": 2,
@@ -76,37 +76,37 @@
 	},
 	{
 		"type": "DASH",
-		"name": "Tower",
+		"name": "Cavalry",
 		"attackPower": 2,
 		"attackDistance": 3,
 		"moveDistance": 3,
-		"victoryPoints": 1,
+		"victoryPoints": 2,
 		"health": 4,
 		"sides": {
 			"NORTH": "ARMORED",
-			"SOUTH": "WEAK",
+			"SOUTH": "DEFAULT",
 			"WEST": "DEFAULT",
 			"EAST": "DEFAULT"
 		}
 	},
 	{
 		"type": "DASH",
-		"name": "Diamonds",
+		"name": "Infantry",
 		"attackPower": 3,
 		"attackDistance": 2,
 		"moveDistance": 2,
 		"victoryPoints": 3,
-		"health": 10,
+		"health": 8,
 		"sides": {
 			"NORTH": "ARMORED",
-			"SOUTH": "WEAK",
+			"SOUTH": "DEFAULT",
 			"WEST": "DEFAULT",
 			"EAST": "DEFAULT"
 		}
 	},
 	{
 		"type": "SWOOP",
-		"name": "Queen",
+		"name": "Berserk",
 		"attackPower": 2,
 		"attackDistance": 3,
 		"moveDistance": 2,
@@ -121,32 +121,32 @@
 	},
 	{
 		"type": "PULL",
-		"name": "King",
+		"name": "Commander",
 		"attackPower": 3,
 		"attackDistance": 3,
 		"moveDistance": 2,
-		"victoryPoints": 2,
+		"victoryPoints": 3,
 		"health": 7,
 		"sides": {
 			"NORTH": "ARMORED",
-			"SOUTH": "WEAK",
+			"SOUTH": "DEFAULT",
 			"WEST": "DEFAULT",
 			"EAST": "DEFAULT"
 		}
 	},
 	{
-		"type": "SWOOP",
-		"name": "Clubs",
-		"attackPower": 3,
+		"type": "GUNNER",
+		"name": "Archer",
+		"attackPower": 2,
 		"attackDistance": 3,
 		"moveDistance": 2,
-		"victoryPoints": 3,
-		"health": 10,
+		"victoryPoints": 2,
+		"health": 2,
 		"sides": {
 			"NORTH": "ARMORED",
-			"SOUTH": "WEAK",
-			"WEST": "DEFAULT",
-			"EAST": "DEFAULT"
+			"SOUTH": "DEFAULT",
+			"WEST": "WEAK",
+			"EAST": "WEAK"
 		}
 	}
 ]

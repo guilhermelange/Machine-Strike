@@ -1,0 +1,63 @@
+{
+	"Player1": [
+		{
+			"machine": "Commander",
+			"positions": [
+				[7,0]
+			]
+		},
+		{
+			"machine": "Lancer",
+			"positions": [
+				[6,1],
+				[7,6]
+			]
+		},
+		{
+			"machine": "Shooter",
+			"positions": [
+				[7,7],
+				[7,5]
+			]
+		},
+		{
+			"machine": "Knight",
+			"positions": [
+				[6,7]
+			]
+		},
+		{
+			"machine": "Ram",
+			"positions": [
+				[7,4]
+			]
+		}
+	],
+	"Player2": [
+		{
+			"machine": "Commander",
+			"positions": [
+				[0,3]
+			]
+		},
+		{
+			"machine": "Berserk",
+			"positions": [
+				[0,4]
+			]
+		},
+		{
+			"machine": "Archer",
+			"positions": [
+				[0,1],
+				[0,6]
+			]
+		},
+		{
+			"machine": "Fighter",
+			"positions": [
+				[1,3]
+			]
+		}
+	]
+}

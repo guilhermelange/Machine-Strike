@@ -159,7 +159,7 @@ export default function Index() {
                 <Text display={'inline'} color={'teal.100'}>3. </Text>Deve ser selecionado um arquivo válido de inventário para os jogadores. O inventário define as máquinas em campo de cada jogador assim como sua possição inicial.
               </Text>
               <Text>
-                <Text display={'inline'} color={'teal.100'}>4. </Text>Iniciar a partida com base nas configurações selecionada.
+                <Text display={'inline'} color={'teal.100'}>4. </Text>Iniciar a partida com base nas configurações selecionadas.
               </Text>
             </Flex>
           </ModalBody>
